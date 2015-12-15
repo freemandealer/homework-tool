@@ -1,10 +1,17 @@
 #!/bin/sh
-## param $1=PCAPFILE $2=IP $3=PORT $4=dry-run
+## param $1=PCAPFILE $2=IP $3=PORT
 TCP_TOOL=/home/freeman/TCP-homework/tapo/tcp_tool
 
-sender_raw=`tcpdump -n -r ${1} | awk '{print $3}' | sort |  uniq -c | sort -k 1 -n -r | awk 'NR==1 {print $2}'`
-IP=`echo  $sender_raw | awk -F . '{print $1"."$2"."$3"."$4}'`
-PORT=`echo $sender_raw | awk -F . '{print $5}'`
+if [ $# -eq 1]
+then
+	sender_raw=`tcpdump -n -r ${1} | awk '{print $3}' | sort |  uniq -c | sort -k 1 -n -r | awk 'NR==1 {print $2}'`
+	IP=`echo  $sender_raw | awk -F . '{print $1"."$2"."$3"."$4}'`
+	PORT=`echo $sender_raw | awk -F . '{print $5}'`
+else
+	IP=${2}
+	PORT=${3}
+fi
+
 
 if [ $# -ne 3 -a $# -ne 1 ]
 then
